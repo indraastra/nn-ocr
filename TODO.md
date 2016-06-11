@@ -1,3 +1,7 @@
+# Level up
+- Port to Tensorflow
+
+
 # Port coursera-ml nn
 - [DONE] Convert .mat data for use with numpy
 - [DONE] Sigmoid / relu activation
@@ -12,12 +16,12 @@
 - [DONE] Use algorithm from above
 
 # UI
-- Live classification from canvas drawing
-- Translate and resize canvas image
+- [DONE] Live classification from canvas drawing
+- [DONE] Translate and resize canvas image
 - [DONE] Provide list of matches is order of probability
 
 # Training/Classification Pipeline
-- Trainer should perform metaparameter optimization
+- [DONE] Trainer should perform metaparameter optimization
     -- Split dataset into training, CV, and test sets
     -- Take cross product of metaparameters, train on each combination
     -- For each combination, record performance on CV set
@@ -26,7 +30,7 @@
     -- Interface should be:
         input: training data (X, y), num_classes
         output: weights
-- Classifier should allow for top n matching classes to be returned
+- [DONE] Classifier should allow for top n matching classes to be returned
     -- Interface should be:
         input: weights, num_classes
         output: top n matching classes
