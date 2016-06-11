@@ -35,4 +35,6 @@ to getting figures displaying correctly.
 
 ![Web UI 2](images/web-ui-2.png)
 ![Sample training data](images/font-data-viz.png)
+![Scaled and shifted text 1](images/scaled-shifted-1.png)
+![Scaled and shifted text 2](images/scaled-shifted-2.png)
 

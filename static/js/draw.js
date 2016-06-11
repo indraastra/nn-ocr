@@ -10,26 +10,21 @@ function postImage() {
     var dataURL = $('#sketch')[0].toDataURL("image/png");
     $.post('/classify',
             {'imageb64': dataURL, 'limit': 5}).done(function(data) {
-        console.log(data);
-        labels = data['labels'];
-        scores = data['scores'];
-        glyphs = data['glyphs'];
 
-        drawTable(labels, glyphs, scores);
-        
+        drawTable(data.results);
     });
 }
 
-function drawTable(labels, glyphs, scores) {
+function drawTable(results) {
     $('#results').empty();
     var table = $('<table></table>');
     var head = $('<tr><th>Label</th><th>Glyph</th><th>Score</th></tr>');
     table.append(head);
-    for (i = 0; i < labels.length; ++i) {
+    for (i = 0; i < results.length; ++i) {
         var row = $('<tr></tr>');
-        var label = $('<td></td>').text(labels[i]);
-        var glyph = $('<td></td>').text(glyphs[i]);
-        var score = $('<td></td>').text(scores[i]);
+        var label = $('<td></td>').text(results[i].label);
+        var glyph = $('<td></td>').text(results[i].glyph);
+        var score = $('<td></td>').text(results[i].score);
         row.append(label);
         row.append(glyph);
         row.append(score);

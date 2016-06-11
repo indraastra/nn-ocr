@@ -34,7 +34,7 @@ def predict_top_n(classifier, X, limit=10):
     # Return top n classes.
     top_n = (-h2).argsort(axis=1)[:, :limit]
     rows = np.tile(np.arange(len(h2)), (limit, 1)).T
-    return top_n, h2[rows, top_n]
+    return top_n.flatten(), h2[rows, top_n].flatten()
 
 
 def load_classifier(params_file):
