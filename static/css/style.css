@@ -1,0 +1,63 @@
+html {
+    font-family: 'Raleway', sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 10px;
+}
+
+#ui {
+    width: 400px;
+    margin: auto;
+}
+
+#sketch {
+    background: black;
+    width: 400px;
+    height: 400px;
+    margin: auto;
+    border: 4px solid #777;
+    border-radius: 20px;
+}
+
+#buttons {
+    width: 400px;
+    margin: auto;
+    margin-top: 20px;
+    text-align: center;
+}
+
+#buttons button {
+    border: 4px solid #c8b9a0;
+    border-radius: 4px;
+    background-color: #333;
+    color: white;
+    height: 40px;
+    width: 100px;
+    text-transform: uppercase;
+    font-family: 'Raleway', sans-serif;
+}
+
+#results {
+    text-align: center;
+    margin-top: 20px;
+}
+#results table {
+    border-collapse: collapse;
+    width: 100%;
+    padding: 0;
+    border: 4px solid #777;
+}
+#results table tr {
+    background-color: #ddd;
+    border-bottom: 1px solid #ddd;
+}
+#results table tr:nth-child(odd) {
+    background-color: #fff;
+}
+#results table td,th {
+    padding: 5px;
+    border: none;
+    display: table-cell;
+}
