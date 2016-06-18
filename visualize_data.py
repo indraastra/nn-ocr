@@ -5,8 +5,8 @@ import random
 import click
 import numpy as np
 
-from ex4.display_data import display_data
-from ex4.utils import load_data
+from matlab_port.display_data import display_data
+from matlab_port.utils import load_data
 
 
 ## =========== Part 1: Loading and Visualizing Data =============

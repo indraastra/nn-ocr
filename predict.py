@@ -5,8 +5,8 @@ import numpy as np
 import scipy.io as sio
 import scipy.optimize as sopt
 
-from ex4.utils import reshape_params, flatten_params, load_data
-from ex4.sigmoid import sigmoid
+from matlab_port.utils import reshape_params, flatten_params, load_data
+from matlab_port.sigmoid import sigmoid
 
 
 def predict_best(classifier, X):

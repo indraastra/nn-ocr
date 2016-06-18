@@ -7,8 +7,8 @@ import click
 import numpy as np
 import scipy.io as sio
 
-from ex4.display_data import display_data
-from ex4.utils import load_data
+from matlab_port.display_data import display_data
+from matlab_port.utils import load_data
 
 
 FORMAT = {

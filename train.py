@@ -5,9 +5,9 @@ import numpy as np
 import scipy.io as sio
 import scipy.optimize as sopt
 
-from ex4.nn_cost_function import nn_cost_function
-from ex4.rand_initialize_weights import rand_initialize_weights
-from ex4.utils import flatten_params, load_data
+from matlab_port.nn_cost_function import nn_cost_function
+from matlab_port.rand_initialize_weights import rand_initialize_weights
+from matlab_port.utils import flatten_params, load_data
 from predict import make_classifier, classifier_accuracy, save_classifier
 
 

@@ -4,7 +4,7 @@ import click
 
 from train import make_trainer
 from predict import classifier_accuracy, save_classifier
-from ex4.utils import partition_data, shuffle_data, load_data
+from matlab_port.utils import partition_data, shuffle_data, load_data
 
 HIDDEN_LAYER_OPTS   = [ 25, 50, 100 ]
 REGULARIZATION_OPTS = [ 0.03, 0.1, 0.3, 1, 3, 10, 30 ]
