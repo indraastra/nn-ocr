@@ -29,7 +29,7 @@ def load_data(input, source='numpy'):
 def shuffle_data(X, y):
     Z = np.c_[X, y]
     np.random.shuffle(Z)
-    X, y = Z[:,:-1], Z[:,-1].astype(np.uint8)
+    X, y = Z[:,:-y.shape[1]], Z[:,-y.shape[1]:].astype(np.uint8)
     return X, y
 
 
