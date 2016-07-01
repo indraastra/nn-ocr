@@ -81,16 +81,12 @@ with graph.as_default():
   tf_test_dataset = tf.constant(test_dataset)
   
   # Variables.
-  weights_1 = tf.Variable(
-    tf.truncated_normal([image_size * image_size, hidden_layer_1]))
-  biases_1 = tf.Variable(tf.zeros([hidden_layer_1]))
-  weights_2 = tf.Variable(
-    tf.truncated_normal([hidden_layer_1, num_labels]))
-  biases_2 = tf.Variable(tf.zeros([num_labels]))
-
+  weights = tf.Variable(
+    tf.truncated_normal([image_size * image_size, num_labels]))
+  biases = tf.Variable(tf.zeros([num_labels]))
+  
   # Training computation.
-  feedforwarder = gen_feedforwarder(weights_1, biases_1, weights_2, biases_2)
-  logits = feedforwarder(tf_train_dataset)
+  logits = tf.matmul(tf_train_dataset, weights) + biases
   loss = tf.reduce_mean(
     tf.nn.softmax_cross_entropy_with_logits(logits, tf_train_labels))
   
@@ -99,8 +95,9 @@ with graph.as_default():
   
   # Predictions for the training, validation, and test data.
   train_prediction = tf.nn.softmax(logits)
-  valid_prediction = tf.nn.softmax(feedforwarder(tf_valid_dataset))
-  test_prediction = tf.nn.softmax(feedforwarder(tf_test_dataset))
+  valid_prediction = tf.nn.softmax(
+    tf.matmul(tf_valid_dataset, weights) + biases)
+  test_prediction = tf.nn.softmax(tf.matmul(tf_test_dataset, weights) + biases)
 
 
 with tf.Session(graph=graph) as session:

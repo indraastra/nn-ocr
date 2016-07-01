@@ -8,19 +8,12 @@ from matlab_port.display_data import display_data
 from matlab_port.utils import load_data, partition_data, shuffle_data
 
 
+data_file = 'data/fontdata_alpha_28.mat'
 image_size = 28
-num_labels = 10
+num_labels = 52
 batch_size = 128
 hidden_layer_1 = 1024
 num_steps = 3001
-pickle_file = 'data/notMNIST.pickle'
-
-
-def reformat(dataset, labels):
-  dataset = dataset.reshape((-1, image_size * image_size)).astype(np.float32)
-  # Map 0 to [1.0, 0.0, 0.0 ...], 1 to [0.0, 1.0, 0.0 ...]
-  labels = (np.arange(num_labels) == labels[:,None]).astype(np.float32)
-  return dataset, labels
 
 
 def make_one_hot(labels):
@@ -47,23 +40,16 @@ def gen_feedforwarder(weights_1, biases_1, weights_2, biases_2):
   return feedforwarder
 
 
-with open(pickle_file, 'rb') as f:
-  save = pickle.load(f)
-  train_dataset = save['train_dataset']
-  train_labels = save['train_labels']
-  valid_dataset = save['valid_dataset']
-  valid_labels = save['valid_labels']
-  test_dataset = save['test_dataset']
-  test_labels = save['test_labels']
-  del save  # hint to help gc free up memory
-  print('Training set', train_dataset.shape, train_labels.shape)
-  print('Validation set', valid_dataset.shape, valid_labels.shape)
-  print('Test set', test_dataset.shape, test_labels.shape)
+font_dataset, font_labels = load_data(data_file, 'numpy')
+font_dataset = font_dataset.astype(np.float32)
+font_labels = make_one_hot(font_labels)
+
+font_dataset, font_labels = shuffle_data(font_dataset, font_labels)
+train_dataset, train_labels, X, y = partition_data(font_dataset, font_labels, split=.9)
+valid_dataset, valid_labels, test_dataset, test_labels = partition_data(X, y, split=.5)
 
 
-train_dataset, train_labels = reformat(train_dataset, train_labels)
-valid_dataset, valid_labels = reformat(valid_dataset, valid_labels)
-test_dataset, test_labels = reformat(test_dataset, test_labels)
+print('Original set', font_dataset.shape, font_labels.shape)
 print('Training set', train_dataset.shape, train_labels.shape)
 print('Validation set', valid_dataset.shape, valid_labels.shape)
 print('Test set', test_dataset.shape, test_labels.shape)
@@ -144,5 +130,5 @@ with tf.Session(graph=graph) as session:
   print("Actual: ")
   print(labels[sel].reshape((10, 10), order='F'))
   print(np.sum(np.abs(predictions[sel] - labels[sel]) == 26), "capitalization errors")
-  display_data(error_test_data[sel, :], order='C');
+  display_data(error_test_data[sel, :], order='F');
 
