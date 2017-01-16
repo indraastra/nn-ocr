@@ -27,9 +27,13 @@ def load_data(input, source='numpy'):
 
 
 def shuffle_data(X, y):
+    if y.ndim == 1:
+      y = y.reshape((-1, 1))
     Z = np.c_[X, y]
     np.random.shuffle(Z)
     X, y = Z[:,:-y.shape[1]], Z[:,-y.shape[1]:].astype(np.uint8)
+    if y.shape[1] == 1:
+      y = y.flatten()
     return X, y
 
 

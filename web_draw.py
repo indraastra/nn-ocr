@@ -4,22 +4,48 @@ from io import BytesIO
 
 from flask import Flask, jsonify, render_template, request
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageOps
+import tensorflow as tf
 
 from en_utils import image_to_numpy, load_glyph_set
-from predict import load_classifier, predict_top_n
 from imutils import square_bbox
+from keras_port.lenet import LeNet
+from predict import load_classifier, predict_top_n
 
 
 IMG_PREFIX = 'data:image/png;base64,'
-IMG_SIZE = 20
-IMG_WEIGHTS = 'weights/numbers.mat'
+IMG_SIZE = 28
+IMG_WEIGHTS = 'weights/lenet_mnist.dat'
 GLYPH_SET = 'numbers'
 GLYPHS = load_glyph_set(GLYPH_SET)
 
 
 app = Flask(__name__)
-classifier = load_classifier(IMG_WEIGHTS)
+classifier = LeNet.build(width=IMG_SIZE, height=IMG_SIZE, depth=1, num_classes=len(GLYPHS),
+    weights_path=IMG_WEIGHTS)
+graph = tf.get_default_graph()
+
+
+def image_to_input(image_bytes):
+    image = Image.open(BytesIO(b64decode(image_bytes)))
+    image = ImageOps.grayscale(image)
+    target_size = (IMG_SIZE, IMG_SIZE)
+
+    # Crop image to bounding box and resize to target image.
+    bbox = square_bbox(image)
+    if not bbox:
+      return
+    b = 20
+    bbox = (bbox[0] - b, bbox[1] - b, bbox[2] + b, bbox[3] + b)
+
+    subimage = image.crop(bbox)
+    subimage = subimage.resize(target_size)
+
+    mat = np.array(subimage.getdata(), np.float64) / 255
+    mat = mat.reshape(target_size, order='C')
+    print(mat.astype('uint8'))
+    mat = mat[np.newaxis, :, :, np.newaxis]
+    return mat
 
 
 @app.route('/')
@@ -29,50 +55,39 @@ def index():
 
 @app.route('/classify', methods=['POST'])
 def classify():
-    results = {}
+    results = {'results': [], 'status': None}
+
     if 'imageb64' not in request.form:
+        results['status'] = 'missing image'
         return jsonify(results)
 
     data = request.form['imageb64']
     if not data.startswith(IMG_PREFIX):
+        results['status'] = 'image not in base64'
         return jsonify(results)
 
-    data = data[len(IMG_PREFIX):]
-    image = Image.open(BytesIO(b64decode(data)))
-    target_size = (IMG_SIZE, IMG_SIZE)
+    classifier_input = image_to_input(data[len(IMG_PREFIX):])
+    if not input:
+        results['status'] = 'no image to classify'
+        return jsonify(results)
 
-    bbox = square_bbox(image)
-    if not bbox:
-        return jsonify({'results': []})
+    #labels, scores = predict_top_n(classifier, subimage, limit=3)
+    with graph.as_default():
+      scores = classifier.predict(classifier_input).flatten()
+      print(scores)
 
-    subimage = image.crop(bbox)
-    subimage = subimage.resize(target_size)
-    subimage = image_to_numpy(subimage)
-    print(subimage.reshape(IMG_SIZE, IMG_SIZE, order='F').astype(np.uint8))
-    labels, scores = predict_top_n(classifier, subimage, limit=3)
+      res = []
+      for i, score in enumerate(scores):
+          res.append({
+              'label': i,
+              'score': float(score),
+              'glyph': GLYPHS[i],
+          })
+          print(GLYPHS[i], score)
+      res.sort(key=lambda d: d['score'], reverse=True)
+      results['results'] = res
 
-    # This was dumb.
-    #all_scores = [0.0 for i in range(len(GLYPHS))]
-    #for subimage in image_windows(image, target_size,
-    #                              50, .75, .1):
-    #    image = image_to_numpy(subimage)
-    #    labels, scores = predict_top_n(classifier, image, limit=1)
-    #    for label, score in zip(labels.flatten(), scores.flatten()):
-    #        if score < .75: pass
-    #        #all_scores[label] += score
-    #        all_scores[label] = max(score, all_scores[label])
-
-    results = []
-    for label, score in zip(labels, scores):
-        results.append({
-            'label': int(label),
-            'score': score,
-            'glyph': GLYPHS[label],
-        })
-        print(GLYPHS[label], score)
-    results.sort(key=lambda d: d['score'], reverse=True)
-
-    return jsonify({'results': results})
+    return jsonify(results)
 
 
 if __name__ == '__main__':
