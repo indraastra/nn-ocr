@@ -15,15 +15,12 @@ from predict import load_classifier, predict_top_n
 
 IMG_PREFIX = 'data:image/png;base64,'
 IMG_SIZE = 28
-IMG_WEIGHTS = 'weights/lenet_mnist.dat'
+IMG_WEIGHTS = 'weights/lenet_mnist_aug.h5'
 GLYPH_SET = 'numbers'
 GLYPHS = load_glyph_set(GLYPH_SET)
 
 
 app = Flask(__name__)
-classifier = LeNet.build(width=IMG_SIZE, height=IMG_SIZE, depth=1, num_classes=len(GLYPHS),
-    weights_path=IMG_WEIGHTS)
-graph = tf.get_default_graph()
 
 
 def image_to_input(image_bytes):
@@ -91,5 +88,9 @@ def classify():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    classifier = LeNet.build(width=IMG_SIZE, height=IMG_SIZE, depth=1, num_classes=len(GLYPHS),
+        weights_path=IMG_WEIGHTS)
+    graph = tf.get_default_graph()
+
+    app.run(debug=False)
 

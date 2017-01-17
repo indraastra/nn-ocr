@@ -6,10 +6,11 @@ from keras.layers.convolutional import MaxPooling2D
 from keras.layers.core import Activation
 from keras.layers.core import Flatten
 from keras.layers.core import Dense
+from keras.layers.core import Dropout
 
 class LeNet:
   @staticmethod
-  def build(width, height, depth, num_classes, weights_path=None):
+  def build(width, height, depth, num_classes, weights_path=None, dropout=True):
     model = Sequential()
 
     # First set of CONV => RELU => POOL.
@@ -27,6 +28,8 @@ class LeNet:
     model.add(Flatten())
     model.add(Dense(500))
     model.add(Activation('relu'))
+    if dropout:
+        model.add(Dropout(.5))
 
     # softmax classifier
     model.add(Dense(num_classes))
