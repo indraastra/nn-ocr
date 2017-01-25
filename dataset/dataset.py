@@ -15,17 +15,23 @@ def save(X, y, labels, output_dir):
     for i in range(len(y)):
         class_idx = y[i]
         filename = os.path.join(classdirs[class_idx], str(i)) + '.png'
-        imsave(filename, X[i])
+        if len(X[i].shape) == 3 and X[i].shape[-1] == 1:
+            # Drop the last dimension if grayscale.
+            imsave(filename, X[i].reshape(X[i].shape[:2]))
+        else:
+            imsave(filename, X[i])
 
 
 def preview(X, y, labels, cells, randomize):
     # Select as many images as can neatly fit in a square display.
     w, h = cells
-    print("Displaying images in a {}x{} grid.".format(h, w))
 
     num_images = w * h
     images = X[:num_images]
     size = images[0].shape[0]
+
+    print("Displaying {}x{} images in a {}x{} grid.".format(size, size,
+        h, w))
 
     combined_image = np.zeros((size * h, size * w))
     image_labels = [[None] * w for _ in range(h)]

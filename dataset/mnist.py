@@ -20,12 +20,6 @@ def cli():
 
 
 @cli.command()
-def load_data():
-    click.echo('Loading MNIST data...')
-    return load()
-
-
-@cli.command()
 @click.argument('output_dir')
 def save_data(output_dir):
     (X_train, y_train), (X_test, y_test) = load()
@@ -33,8 +27,8 @@ def save_data(output_dir):
     train_dir = os.path.join(dataset_dir, 'train')
     test_dir = os.path.join(dataset_dir, 'test')
 
-    return save(X_train, y_train, LABELS, output_dir)
-    return save(X_test, y_test, LABELS, output_dir)
+    save(X_train, y_train, LABELS, train_dir)
+    save(X_test, y_test, LABELS, test_dir)
 
 
 @cli.command()
