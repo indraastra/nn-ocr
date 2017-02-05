@@ -1,3 +1,6 @@
+var _timer;
+var _sketch;
+
 function clearImage() {
     var canvas = $('#sketch')[0];
     var ctx = canvas.getContext('2d');
@@ -6,6 +9,7 @@ function clearImage() {
 }
 
 function submitImage() {
+    if (!_sketch.painting) return;
     var dataURL = $('#sketch')[0].toDataURL("image/png");
     $.post('/classify', {
       'imageb64': dataURL, 'limit': 5
@@ -31,8 +35,20 @@ function drawTable(results) {
 }
 
 $(function() {
-    $('#sketch').sketch({defaultColor: 'white', defaultSize: 15});
-    $('#submit-sketch').click(submitImage);
-    $('#clear-sketch').click(clearImage);
+    $('#sketch').sketch({
+      defaultColor: 'white', 
+      defaultSize: 15,
+    });
+    $('#start-sketch').click(function() {
+      _timer = setInterval(submitImage, 100);
+    });
+    $('#clear-sketch').click(function () {
+      clearImage();
+    });
+    $('#stop-sketch').click(function () {
+      clearInterval(_timer);
+      _timer = null;
+    });
+    _sketch = $('#sketch').data('sketch');
     console.log('Initialized!');
 });

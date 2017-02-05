@@ -8,7 +8,7 @@ body {
 }
 
 #ui {
-    width: 400px;
+    width: 416px;
     margin: auto;
 }
 
@@ -22,8 +22,8 @@ body {
 
 #sketch {
     background: black;
-    width: 400px;
-    height: 400px;
+    width: 100%;
+    height: 100%;
     z-index: 0;
     position: absolute;
     left: 0px;
@@ -31,6 +31,8 @@ body {
 }
 
 #overlay {
+    width: 100%;
+    height: 100%;
     z-index: 1;
     position: absolute;
     left: 0px;
@@ -38,7 +40,7 @@ body {
 }
 
 #buttons {
-    width: 400px;
+    width: 100%;
     margin: auto;
     margin-top: 20px;
     text-align: center;
@@ -63,6 +65,7 @@ body {
 #results {
     text-align: center;
     margin-top: 20px;
+    width: 100%;
 }
 #results table {
     border-collapse: collapse;
