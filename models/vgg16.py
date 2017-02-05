@@ -23,3 +23,4 @@ def augmented_vgg16(image_shape, num_classes, weights_path=None):
     model.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['accuracy'])
 
     return model
+

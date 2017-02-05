@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Handwriting Recognition Canvas</title>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="http://intridea.github.io/sketch.js/lib/sketch.js"></script>
+
+    <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css"
+          href="{{ url_for('static', filename='css/style.css') }}" />
+  </head>
+
+  <body>
+      <div id="ui">
+          <div id="layers">
+              <canvas id="sketch" width="400" height="400"></canvas>
+              <!--<canvas id="overlay" width="400" height="400"></canvas>-->
+          </div>
+          <div id="buttons">
+              <button id="submit-sketch">
+                  Submit 
+              </button>
+              <button id="clear-sketch">
+                  Clear 
+              </button>
+          </div>
+          <div id="results">
+          </div>
+      </div>
+      <script src="{{ url_for('static', filename='js/draw.js') }}"></script>
+  </body>
+
+</html>

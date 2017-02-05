@@ -10,7 +10,7 @@ from models.vgg16 import augmented_vgg16
 
 
 # Path to the model weights file.
-top_model_weights_path = 'weights/en_bottleneck_model.h5'
+top_model_weights_path = 'models/weights/en_bottleneck_model.h5'
 
 img_size = 64
 num_classes = len(en.LABELS)

@@ -77,11 +77,20 @@ def save_data(output_dir, image_size, font_limit):
 @click.option('--cells_x', default=10)
 @click.option('--cells_y', default=10)
 @click.option('--font_limit', default=-1)
+@click.option('--label', default=None)
 @click.option('--randomize', default=False)
-def preview_data(image_size, cells_x, cells_y, font_limit, randomize):
+def preview_data(image_size, cells_x, cells_y, font_limit, label, randomize):
     (X_train, y_train), (X_test, y_test) = load(image_size, font_limit=font_limit)
-    click.echo('Previewing en data...')
-    preview(X_train, y_train, LABELS, (cells_x, cells_y), randomize)
+    if label:
+        click.echo('Previewing en data for label: {}'.format(label))
+        label_idx = LABELS.index(label)
+        X_preview = X_train[y_train == label_idx]
+        y_preview = y_train[y_train == label_idx]
+    else:
+        click.echo('Previewing en data for all labels')
+        X_preview = X_train
+        y_preview = y_train
+    preview(X_preview, y_preview, LABELS, (cells_x, cells_y), randomize)
 
 
 if __name__ == '__main__':
