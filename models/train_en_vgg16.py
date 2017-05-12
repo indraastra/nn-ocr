@@ -19,7 +19,7 @@ num_classes = len(en.LABELS)
 
 nb_epoch = 500
 
-(X_train, y_train), (X_test, y_test) = en.load(img_size, depth_3=True, categorical=True)
+(X_train, y_train), (X_test, y_test) = en.load_data(img_size, depth_3=True, categorical=True)
 image_shape = X_train.shape[1:]
 
 
