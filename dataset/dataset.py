@@ -9,6 +9,7 @@ from scipy.misc import imsave
 
 from fonts import load_font, char_to_glyph
 
+
 def load(labels, fonts, image_size, depth_3=False, categorical=False, train_ratio=.8, font_limit=-1):
     fonts = fonts[:font_limit]
     data = []
@@ -48,6 +49,7 @@ def load(labels, fonts, image_size, depth_3=False, categorical=False, train_rati
     y_train, y_test = y[:split_idx], y[split_idx:]
 
     return (X_train, y_train), (X_test, y_test)
+
 
 def save(X, y, labels, output_dir):
     classdirs = []
@@ -98,4 +100,3 @@ def preview(X, y, labels, cells, randomize):
     plt.axis('off')
     plt.imshow(combined_image, interpolation='nearest')
     plt.show()
-
