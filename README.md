@@ -11,7 +11,7 @@ $ pip install -r requirements.txt`
 
 ```
 $ ./get_en_fonts.sh
-$ python -m dataset.en preview_data --font_limit 100
+$ python -m dataset preview_data --dataset en --font_limit 100
 ```
 
 ### Train

@@ -1,3 +1,5 @@
+import os
+
 import click
 
 from dataset import cjk
@@ -21,10 +23,10 @@ def cli():
 @click.option('--image_size', default=72)
 @click.option('--font_limit', default=-1)
 def save_data(output_dir, dataset, image_size, font_limit):
-    dataset = DATASETS[dataset]
-    labels = dataset.get_labels()
-    (X_train, y_train), (X_test, y_test) = load(dataset.get_labels(),
-            dataset.get_fonts(), image_size, font_limit=font_limit)
+    DATASET = DATASETS[dataset]
+    labels = DATASET.get_labels()
+    (X_train, y_train), (X_test, y_test) = load(labels, DATASET.get_fonts(),
+            image_size, font_limit=font_limit)
     dataset_dir = os.path.join(output_dir, dataset)
     train_dir = os.path.join(dataset_dir, 'train')
     test_dir = os.path.join(dataset_dir, 'test')
@@ -42,10 +44,10 @@ def save_data(output_dir, dataset, image_size, font_limit):
 @click.option('--label', default=None)
 @click.option('--randomize', default=False)
 def preview_data(dataset, image_size, cells_x, cells_y, font_limit, label, randomize):
-    dataset = DATASETS[dataset]
-    labels = dataset.get_labels()
-    (X_train, y_train), (X_test, y_test) = load(dataset.get_labels(),
-            dataset.get_fonts(), image_size, font_limit=font_limit)
+    DATASET = DATASETS[dataset]
+    labels = DATASET.get_labels()
+    (X_train, y_train), (X_test, y_test) = load(labels, DATASET.get_fonts(),
+            image_size, font_limit=font_limit)
     if label:
         click.echo('Previewing en data for label: {}'.format(label))
         label_idx = labels.index(label)
